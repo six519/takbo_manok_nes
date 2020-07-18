@@ -1,5 +1,6 @@
 #include "libs/neslib.h"
 #include "libs/nesdoug.h"
+#include "title.h"
 #include "main.h" 
 
 #pragma bss-name(push, "ZEROPAGE")
@@ -27,10 +28,13 @@ void main (void) {
     ppu_off();
 
     pal_bg(palette);
-        
-	write_text("This is a test!", 0, 0);
+
+    vram_adr(NAMETABLE_A);
+    vram_unrle(title);
 
     music_play(0);
+
+    write_text("Press Start", 42, 146);
     ppu_on_all();
     
     
