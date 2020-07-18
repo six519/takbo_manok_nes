@@ -27,7 +27,7 @@ void main (void) {
         ++i;
     }	
 
-    
+    music_play(0);
     ppu_on_all();
     
     
