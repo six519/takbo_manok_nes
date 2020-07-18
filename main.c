@@ -4,14 +4,23 @@
 
 #pragma bss-name(push, "ZEROPAGE")
 
-const unsigned char text[]="This is a test!";
 const unsigned char palette[]={
     DK_BL, DK_GY, LT_GY, WHITE,
     0,0,0,0,
     0,0,0,0,
     0,0,0,0
 };
-unsigned char i;
+
+void write_text(unsigned char text[], int x, int y) {
+    unsigned char i;
+    vram_adr(NTADR_A(x,y));
+
+    i = 0;
+    while(text[i]){
+        vram_put(text[i]);
+        ++i;
+    }
+}
 
 void main (void) {
     
@@ -19,13 +28,7 @@ void main (void) {
 
     pal_bg(palette);
         
-    vram_adr(NTADR_A(0,0));
-
-    i = 0;
-    while(text[i]){
-        vram_put(text[i]);
-        ++i;
-    }	
+	write_text("This is a test!", 0, 0);
 
     music_play(0);
     ppu_on_all();
