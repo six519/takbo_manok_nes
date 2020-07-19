@@ -20,7 +20,7 @@ const unsigned char sprite_palette[]={
 };
 
 int game_state = 0;
-unsigned int default_scroll = 100;
+unsigned int default_scroll = 85;
 unsigned int scroll_x;
 
 void scroll_bg() {
@@ -33,34 +33,27 @@ void scroll_bg() {
     set_scroll_x(scroll_x);
 }
 
-void draw_sprites(int * opp) {
+void draw_sprites() {
     oam_clear();
     if (game_state == 0) {
         // 8 sprites only per horizontal line :( sad
-        if (*opp) {
-            *opp = 0;
-            oam_meta_spr(80, 10, spriteT);
-            oam_meta_spr(80 + (16 * 2), 10, spriteK);
-            oam_meta_spr(80 + (16 * 4), 10, sprite_O);
-            oam_meta_spr(80 + 16, 10 + 16, spriteA);
-            oam_meta_spr(80 + (16 * 3), 10 + 16, sprite_O);
-        } else {
-            *opp = 1;
-            oam_meta_spr(80 + 16, 10, spriteA);
-            oam_meta_spr(80 + (16 * 3), 10, spriteB);
-            oam_meta_spr(80, 10 + 16, spriteM);
-            oam_meta_spr(80 + (16 * 2), 10 + 16, spriteN);
-            oam_meta_spr(80 + (16 * 4), 10 + 16, spriteK);
-        }
+        oam_meta_spr(80, 2, spriteT);
+        oam_meta_spr(80 + 16, 6, spriteA);
+        oam_meta_spr(80 + (16 * 2), 10, spriteK);
+        oam_meta_spr(80 + (16 * 3), 14, spriteB);
+        oam_meta_spr(80 + (16 * 4), 18, sprite_O);
 
+        oam_meta_spr(80, 22, spriteM);
+        oam_meta_spr(80 + 16, 26, spriteA);
+        oam_meta_spr(80 + (16 * 2), 30, spriteN);
+        oam_meta_spr(80 + (16 * 3), 34, sprite_O);
+        oam_meta_spr(80 + (16 * 4), 38, spriteK);
     } else {
 
     }
 }
 
 void main (void) {
-    int opposite = 0;
-    
     ppu_off();
 
     pal_bg(bg_palette);
@@ -78,7 +71,7 @@ void main (void) {
     while (1){
         ppu_wait_nmi();
         scroll_bg();
-        draw_sprites(&opposite);
+        draw_sprites();
     }
 }
     
