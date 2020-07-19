@@ -48,6 +48,19 @@ void draw_sprites() {
         oam_meta_spr(80 + (16 * 2), 30, spriteN);
         oam_meta_spr(80 + (16 * 3), 34, sprite_O);
         oam_meta_spr(80 + (16 * 4), 38, spriteK);
+
+        oam_spr(80, 46, 138, 0);
+        oam_spr(80, 46 + 8, 154, 0);
+        oam_spr(80, 46 + 16, 170, 0);
+
+        oam_spr(88, 46, 139, 0);
+        oam_spr(88, 46 + 8, 155, 0);
+        oam_spr(88, 46 + 16, 171, 0);        
+
+        oam_spr(96, 46, 140, 0);
+        oam_spr(96, 46 + 8, 156, 0);
+        oam_spr(96, 46 + 16, 172, 0);
+
     } else {
 
     }
