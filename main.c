@@ -22,6 +22,7 @@ const unsigned char sprite_palette[]={
 int game_state = 0;
 unsigned int default_scroll = 85;
 unsigned int scroll_x;
+unsigned char pad1;
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -78,6 +79,14 @@ void draw_sprites() {
     }
 }
 
+void check_input() {
+    if (pad1 && PAD_START) {
+        if (game_state == 0) {
+            game_state = 1;
+        }
+    }
+}
+
 void main (void) {
     ppu_off();
 
@@ -95,8 +104,10 @@ void main (void) {
     
     while (1){
         ppu_wait_nmi();
+        pad1 = pad_poll(0);
         scroll_bg();
         draw_sprites();
+        check_input();
     }
 }
     
