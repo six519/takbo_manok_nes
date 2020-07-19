@@ -4,3 +4,7 @@
 #define WHITE 0x30
 #define DK_BL 0x02
 #define LT_BL 0x01
+#define DK_RD 0x07
+#define LT_GR 0x3a
+#define DK_GR 0x0b
+#define MD_YL 0x28

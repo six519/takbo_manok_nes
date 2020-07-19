@@ -5,8 +5,8 @@
 
 #pragma bss-name(push, "ZEROPAGE")
 
-const unsigned char palette[]={
-    DK_BL, DK_GY, LT_GY, WHITE,
+const unsigned char bg_palette[]={
+    DK_BL, DK_RD, MD_YL, WHITE,
     0,0,0,0,
     0,0,0,0,
     0,0,0,0
@@ -27,7 +27,7 @@ void main (void) {
     
     ppu_off();
 
-    pal_bg(palette);
+    pal_bg(bg_palette);
 
     vram_adr(NAMETABLE_A);
     vram_unrle(title);
