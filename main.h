@@ -90,3 +90,10 @@ const unsigned char chicken_right[]={
       8,  8,0xce,0,
     128
 };
+
+struct GameSprite {
+  unsigned char x;
+  unsigned char y;
+  unsigned char width;
+  unsigned char height;
+};

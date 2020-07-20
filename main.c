@@ -25,6 +25,7 @@ unsigned int scroll_x;
 unsigned char pad1;
 int title_animation_index = 0;
 int chicken_animation_index = 0;
+struct GameSprite chickenSprite = {10, 151, 7, 7};
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -95,9 +96,9 @@ void draw_sprites() {
 
     } else {
         if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
-            oam_meta_spr(10, 151, chicken_left);
+            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_left);
         } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
-            oam_meta_spr(10, 151, chicken_right);
+            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_right);
         }
         
         chicken_animation_index += 1;
