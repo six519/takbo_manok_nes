@@ -9,6 +9,7 @@
 #define DK_GR 0x0b
 #define MD_YL 0x28
 #define ORANG 0x16
+#define LT_VL 0x14
 
 const unsigned char spriteT[]={
       0,  0,0x80,0,

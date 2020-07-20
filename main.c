@@ -13,7 +13,7 @@ const unsigned char bg_palette[]={
 };
 
 const unsigned char sprite_palette[]={
-    ORANG, DK_GR, BLACK, LT_GY,
+    ORANG, LT_VL, BLACK, LT_GY,
     0,0,0,0,
     0,0,0,0,
     0,0,0,0
@@ -34,7 +34,7 @@ void scroll_bg() {
     set_scroll_x(scroll_x);
 }
 
-void draw_sprites(int * title_animation_index) {
+void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
     oam_clear();
     if (game_state == 0) {
         // 8 sprites only per horizontal line :( sad
@@ -92,7 +92,16 @@ void draw_sprites(int * title_animation_index) {
         oam_spr(100 + (8 * 4), 94, 116, 0);
 
     } else {
-
+        if (*chicken_animation_index >= 0 && *chicken_animation_index <=8) {
+            oam_meta_spr(10, 151, chicken_left);
+        } else if (*chicken_animation_index >= 9 && *chicken_animation_index <= 17) {
+            oam_meta_spr(10, 151, chicken_right);
+        }
+        
+        *chicken_animation_index += 1;
+        if (*chicken_animation_index == 17) {
+            *chicken_animation_index = 0;
+        }
     }
 }
 
@@ -106,6 +115,7 @@ void check_input() {
 
 void main (void) {
     int title_animation_index = 0;
+    int chicken_animation_index = 0;
     ppu_off();
 
     pal_bg(bg_palette);
@@ -124,7 +134,7 @@ void main (void) {
         ppu_wait_nmi();
         pad1 = pad_poll(0);
         scroll_bg();
-        draw_sprites(&title_animation_index);
+        draw_sprites(&title_animation_index, &chicken_animation_index);
         check_input();
     }
 }
