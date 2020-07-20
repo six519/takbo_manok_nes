@@ -23,6 +23,8 @@ int game_state = 0;
 unsigned int default_scroll = 85;
 unsigned int scroll_x;
 unsigned char pad1;
+int title_animation_index = 0;
+int chicken_animation_index = 0;
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -34,7 +36,7 @@ void scroll_bg() {
     set_scroll_x(scroll_x);
 }
 
-void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
+void draw_sprites() {
     oam_clear();
     if (game_state == 0) {
         // 8 sprites only per horizontal line :( sad
@@ -57,21 +59,21 @@ void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
         oam_spr(88, 46, 139, 0);
         oam_spr(88, 46 + 8, 155, 0);
 
-        if (*title_animation_index >= 0 && *title_animation_index <= 11) {
+        if (title_animation_index >= 0 && title_animation_index <= 11) {
             oam_spr(80, 46 + 16, 186, 0);
             oam_spr(88, 46 + 16, 187, 0);
-        } else if (*title_animation_index >= 12 && *title_animation_index <= 23) {
+        } else if (title_animation_index >= 12 && title_animation_index <= 23) {
             oam_spr(80, 46 + 16, 170, 0);
             oam_spr(88, 46 + 16, 171, 0);
-        } else if (*title_animation_index >= 24 && *title_animation_index <= 35) {
+        } else if (title_animation_index >= 24 && title_animation_index <= 35) {
             oam_spr(80, 46 + 16, 202, 0);
             oam_spr(88, 46 + 16, 203, 0);
         }
 
-        *title_animation_index += 1;
+        title_animation_index += 1;
 
-        if (*title_animation_index == 35) {
-            *title_animation_index = 0;
+        if (title_animation_index == 35) {
+            title_animation_index = 0;
         }
 
         oam_spr(96, 46, 140, 0);
@@ -92,15 +94,15 @@ void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
         oam_spr(100 + (8 * 4), 94, 116, 0);
 
     } else {
-        if (*chicken_animation_index >= 0 && *chicken_animation_index <=8) {
+        if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
             oam_meta_spr(10, 151, chicken_left);
-        } else if (*chicken_animation_index >= 9 && *chicken_animation_index <= 17) {
+        } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
             oam_meta_spr(10, 151, chicken_right);
         }
         
-        *chicken_animation_index += 1;
-        if (*chicken_animation_index == 17) {
-            *chicken_animation_index = 0;
+        chicken_animation_index += 1;
+        if (chicken_animation_index == 17) {
+            chicken_animation_index = 0;
         }
 
         //show score
@@ -123,8 +125,6 @@ void check_input() {
 }
 
 void main (void) {
-    int title_animation_index = 0;
-    int chicken_animation_index = 0;
     ppu_off();
 
     pal_bg(bg_palette);
@@ -143,7 +143,7 @@ void main (void) {
         ppu_wait_nmi();
         pad1 = pad_poll(0);
         scroll_bg();
-        draw_sprites(&title_animation_index, &chicken_animation_index);
+        draw_sprites();
         check_input();
     }
 }
