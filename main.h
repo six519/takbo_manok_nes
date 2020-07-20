@@ -65,3 +65,27 @@ const unsigned char spriteN[]={
       8,  8,0x97,0,
     128
 };
+
+const unsigned char chicken_jump[]={
+      0,  0,0x88,0,
+      0,  8,0x98,0,
+      8,  0,0x89,0,
+      8,  8,0x99,0,
+    128
+};
+
+const unsigned char chicken_left[]={
+      0,  0,0x88,0,
+      0,  8,0xad,0,
+      8,  0,0x89,0,
+      8,  8,0xae,0,
+    128
+};
+
+const unsigned char chicken_right[]={
+      0,  0,0x88,0,
+      0,  8,0xcd,0,
+      8,  0,0x89,0,
+      8,  8,0xce,0,
+    128
+};
