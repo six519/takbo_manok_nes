@@ -102,6 +102,14 @@ void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
         if (*chicken_animation_index == 17) {
             *chicken_animation_index = 0;
         }
+
+        //show score
+        oam_spr(2, 2, 83, 0);
+        oam_spr(2 + 8, 2, 99, 0);
+        oam_spr(2 + (8 * 2), 2, 111, 0);
+        oam_spr(2 + (8 * 3), 2, 114, 0);
+        oam_spr(2 + (8 * 4), 2, 101, 0);
+        oam_spr(2 + (8 * 5), 2, 58, 0);
     }
 }
 
