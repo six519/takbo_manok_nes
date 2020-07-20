@@ -26,6 +26,9 @@ unsigned char pad1;
 int title_animation_index = 0;
 int chicken_animation_index = 0;
 struct GameSprite chickenSprite = {10, 151, 7, 7};
+int is_jumping = 0;
+int jump_tracker = 0;
+int is_reverse = 0;
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -95,10 +98,31 @@ void draw_sprites() {
         oam_spr(100 + (8 * 4), 94, 116, 0);
 
     } else {
-        if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
-            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_left);
-        } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
-            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_right);
+
+        if (is_jumping) {
+
+            if (is_reverse) {
+                jump_tracker -= 2;
+                chickenSprite.y += 2;
+            } else {
+                jump_tracker += 1;
+                chickenSprite.y -= 1;
+            }
+
+            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_jump);
+            if (jump_tracker == 30) {
+                is_reverse = 1;
+            }
+            if (jump_tracker == 0) {
+                is_reverse = 0;
+                is_jumping = 0;
+            }
+        } else {
+            if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
+                oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_left);
+            } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
+                oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_right);
+            }
         }
         
         chicken_animation_index += 1;
@@ -117,10 +141,17 @@ void draw_sprites() {
 }
 
 void check_input() {
-    if (pad1 && PAD_START) {
+    if (pad1 & PAD_START) {
         if (game_state == 0) {
             sfx_play(0, 0);
             game_state = 1;
+        }
+    } else if (pad1 & PAD_A) {
+        if (game_state == 1) {
+            if (!is_jumping) {
+                sfx_play(1, 0);
+                is_jumping = 1;
+            }
         }
     }
 }
