@@ -108,6 +108,7 @@ void draw_sprites(int * title_animation_index, int * chicken_animation_index) {
 void check_input() {
     if (pad1 && PAD_START) {
         if (game_state == 0) {
+            sfx_play(0, 0);
             game_state = 1;
         }
     }
