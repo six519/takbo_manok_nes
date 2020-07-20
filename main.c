@@ -34,7 +34,7 @@ void scroll_bg() {
     set_scroll_x(scroll_x);
 }
 
-void draw_sprites() {
+void draw_sprites(int * title_animation_index) {
     oam_clear();
     if (game_state == 0) {
         // 8 sprites only per horizontal line :( sad
@@ -50,18 +50,35 @@ void draw_sprites() {
         oam_meta_spr(80 + (16 * 3), 34, sprite_O);
         oam_meta_spr(80 + (16 * 4), 38, spriteK);
 
+        // chicken
         oam_spr(80, 46, 138, 0);
         oam_spr(80, 46 + 8, 154, 0);
-        oam_spr(80, 46 + 16, 170, 0);
 
         oam_spr(88, 46, 139, 0);
         oam_spr(88, 46 + 8, 155, 0);
-        oam_spr(88, 46 + 16, 171, 0);        
+
+        if (*title_animation_index >= 0 && *title_animation_index <= 11) {
+            oam_spr(80, 46 + 16, 186, 0);
+            oam_spr(88, 46 + 16, 187, 0);
+        } else if (*title_animation_index >= 12 && *title_animation_index <= 23) {
+            oam_spr(80, 46 + 16, 170, 0);
+            oam_spr(88, 46 + 16, 171, 0);
+        } else if (*title_animation_index >= 24 && *title_animation_index <= 35) {
+            oam_spr(80, 46 + 16, 202, 0);
+            oam_spr(88, 46 + 16, 203, 0);
+        }
+
+        *title_animation_index += 1;
+
+        if (*title_animation_index == 35) {
+            *title_animation_index = 0;
+        }
 
         oam_spr(96, 46, 140, 0);
         oam_spr(96, 46 + 8, 156, 0);
         oam_spr(96, 46 + 16, 172, 0);
 
+        // press start
         oam_spr(100, 84, 80, 0);
         oam_spr(100 + 8, 84, 114, 0);
         oam_spr(100 + (8 * 2), 84, 101, 0);
@@ -88,6 +105,7 @@ void check_input() {
 }
 
 void main (void) {
+    int title_animation_index = 0;
     ppu_off();
 
     pal_bg(bg_palette);
@@ -106,7 +124,7 @@ void main (void) {
         ppu_wait_nmi();
         pad1 = pad_poll(0);
         scroll_bg();
-        draw_sprites();
+        draw_sprites(&title_animation_index);
         check_input();
     }
 }
