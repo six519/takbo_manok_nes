@@ -28,12 +28,21 @@ int title_animation_index = 0;
 int chicken_animation_index = 0;
 struct GameSprite chickenSprite = {10, 151, 15, 15};
 struct GameSprite obstacle1 = {254, 159, 7, 7}; //254 max
+struct GameSprite obstacle2 = {254, 159, 7, 7};
+struct GameSprite obstacle3 = {254, 159, 7, 7};
+struct GameSprite obstacle4 = {254, 159, 7, 7};
 int is_jumping = 0;
 int jump_tracker = 0;
 int is_reverse = 0;
 int score = 0;
 int threshold_score = 0;
 int threshold_collide = 0;
+int threshold_show_obstacle2 = 0;
+int obstacle2_showed = 0;
+int threshold_show_obstacle3 = 0;
+int obstacle3_showed = 0;
+int threshold_show_obstacle4 = 0;
+int obstacle4_showed = 0;
 int lives = 3;
 
 void scroll_bg() {
@@ -140,7 +149,65 @@ void draw_sprites() {
 
             //show obstacles
             oam_spr(obstacle1.x, obstacle1.y, 192, 0);
-            obstacle1.x -= 1;
+            obstacle1.x -= 2;
+
+            if(obstacle1.x == 0) {
+                obstacle1.x = 254;
+            }
+
+            if (!obstacle2_showed) {
+                threshold_show_obstacle2 += 1;
+            }
+
+            if (threshold_show_obstacle2 == 90) {
+                obstacle2_showed = 1;
+            }
+
+
+            if (obstacle2_showed) {
+                oam_spr(obstacle2.x, obstacle2.y, 193, 0);
+                obstacle2.x -= 2;
+
+                if(obstacle2.x == 0) {
+                    obstacle2.x = 254;
+                }
+            }
+
+            if (!obstacle3_showed) {
+                threshold_show_obstacle3 += 1;
+            }
+
+            if (threshold_show_obstacle3 == 120) {
+                obstacle3_showed = 1;
+            }
+
+
+            if (obstacle3_showed) {
+                oam_spr(obstacle3.x, obstacle3.y, 194, 0);
+                obstacle3.x -= 2;
+
+                if(obstacle3.x == 0) {
+                    obstacle3.x = 254;
+                }
+            }
+
+            if (!obstacle4_showed) {
+                threshold_show_obstacle4 += 1;
+            }
+
+            if (threshold_show_obstacle4 == 200) {
+                obstacle4_showed = 1;
+            }
+
+
+            if (obstacle4_showed) {
+                oam_spr(obstacle4.x, obstacle4.y, 195, 0);
+                obstacle4.x -= 2;
+
+                if(obstacle4.x == 0) {
+                    obstacle4.x = 254;
+                }
+            }
 
             threshold_score += 1;
 
@@ -231,7 +298,7 @@ void is_collided()  {
             }
         }
 
-        if (check_collision(&chickenSprite, &obstacle1)) {
+        if (check_collision(&chickenSprite, &obstacle1) || check_collision(&chickenSprite, &obstacle2) || check_collision(&chickenSprite, &obstacle3) || check_collision(&chickenSprite, &obstacle4)) {
             pal_col(0,DK_GR);
             if(threshold_collide == 0) {
                 sfx_play(2, 0);
