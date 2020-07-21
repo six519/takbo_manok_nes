@@ -1,7 +1,8 @@
 #include "libs/neslib.h"
 #include "libs/nesdoug.h"
 #include "game.h"
-#include "main.h" 
+#include "main.h"
+#include <stdlib.h> 
 
 #pragma bss-name(push, "ZEROPAGE")
 
@@ -29,6 +30,8 @@ struct GameSprite chickenSprite = {10, 151, 7, 7};
 int is_jumping = 0;
 int jump_tracker = 0;
 int is_reverse = 0;
+int score = 0;
+int threshold_score = 0;
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -41,6 +44,8 @@ void scroll_bg() {
 }
 
 void draw_sprites() {
+    char buffer[7];
+    int i = 0;
     oam_clear();
     if (game_state == 0) {
         // 8 sprites only per horizontal line :( sad
@@ -137,6 +142,52 @@ void draw_sprites() {
         oam_spr(2 + (8 * 3), 2, 114, 0);
         oam_spr(2 + (8 * 4), 2, 101, 0);
         oam_spr(2 + (8 * 5), 2, 58, 0);
+
+        threshold_score += 1;
+
+        if (threshold_score == 15) {
+            score += 1;
+            threshold_score = 0;
+        }
+
+        itoa(score, buffer, 10);
+
+        for(i = 0; i < 7; i++) {
+            switch (buffer[i]) {
+                case '0':
+                    oam_spr(2 + (i * 8), 2 + 8, 48, 0);
+                break;
+                case '1':
+                    oam_spr(2 + (i * 8), 2 + 8, 49, 0);
+                break;
+                case '2':
+                    oam_spr(2 + (i * 8), 2 + 8, 50, 0);
+                break;
+                case '3':
+                    oam_spr(2 + (i * 8), 2 + 8, 51, 0);
+                break;
+                case '4':
+                    oam_spr(2 + (i * 8), 2 + 8, 52, 0);
+                break;
+                case '5':
+                    oam_spr(2 + (i * 8), 2 + 8, 53, 0);
+                break;
+                case '6':
+                    oam_spr(2 + (i * 8), 2 + 8, 54, 0);
+                break;
+                case '7':
+                    oam_spr(2 + (i * 8), 2 + 8, 55, 0);
+                break;
+                case '8':
+                    oam_spr(2 + (i * 8), 2 + 8, 56, 0);
+                break;
+                case '9':
+                    oam_spr(2 + (i * 8), 2 + 8, 57, 0);
+                break;
+                default:
+                break;
+            }
+        }
     }
 }
 
