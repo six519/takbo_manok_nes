@@ -55,6 +55,25 @@ void scroll_bg() {
     set_scroll_x(scroll_x);
 }
 
+void show_obstacle(int * showed, int * threshold, int t_val, int sprite_num, struct GameSprite * spr) {
+    if (!*showed) {
+        *threshold += 1;
+    }
+
+    if (*threshold == t_val) {
+        *showed = 1;
+    }
+
+    if (*showed) {
+        oam_spr(spr->x, spr->y, sprite_num, 0);
+        spr->x -= 2;
+
+        if(spr->x == 0) {
+            spr->x = 254;
+        }
+    }
+}
+
 void draw_sprites() {
     char buffer[7];
     int i = 0;
@@ -155,63 +174,13 @@ void draw_sprites() {
                 obstacle1.x = 254;
             }
 
-            if (!obstacle2_showed) {
-                threshold_show_obstacle2 += 1;
-            }
-
-            if (threshold_show_obstacle2 == 90) {
-                obstacle2_showed = 1;
-            }
-
-
-            if (obstacle2_showed) {
-                oam_spr(obstacle2.x, obstacle2.y, 193, 0);
-                obstacle2.x -= 2;
-
-                if(obstacle2.x == 0) {
-                    obstacle2.x = 254;
-                }
-            }
-
-            if (!obstacle3_showed) {
-                threshold_show_obstacle3 += 1;
-            }
-
-            if (threshold_show_obstacle3 == 120) {
-                obstacle3_showed = 1;
-            }
-
-
-            if (obstacle3_showed) {
-                oam_spr(obstacle3.x, obstacle3.y, 194, 0);
-                obstacle3.x -= 2;
-
-                if(obstacle3.x == 0) {
-                    obstacle3.x = 254;
-                }
-            }
-
-            if (!obstacle4_showed) {
-                threshold_show_obstacle4 += 1;
-            }
-
-            if (threshold_show_obstacle4 == 200) {
-                obstacle4_showed = 1;
-            }
-
-
-            if (obstacle4_showed) {
-                oam_spr(obstacle4.x, obstacle4.y, 195, 0);
-                obstacle4.x -= 2;
-
-                if(obstacle4.x == 0) {
-                    obstacle4.x = 254;
-                }
-            }
+            show_obstacle(&obstacle2_showed, &threshold_show_obstacle2, 90, 193, &obstacle2);
+            show_obstacle(&obstacle3_showed, &threshold_show_obstacle3, 800, 194, &obstacle3);
+            show_obstacle(&obstacle4_showed, &threshold_show_obstacle4, 1200, 195, &obstacle4);
 
             threshold_score += 1;
 
-            if (threshold_score == 15) {
+            if (threshold_score == 5) {
                 score += 1;
                 threshold_score = 0;
             }
