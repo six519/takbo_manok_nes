@@ -32,6 +32,7 @@ int jump_tracker = 0;
 int is_reverse = 0;
 int score = 0;
 int threshold_score = 0;
+int lives = 3;
 
 void scroll_bg() {
     if (game_state == 0) {
@@ -187,6 +188,11 @@ void draw_sprites() {
                 default:
                 break;
             }
+        }
+
+        //show lives
+        for (i = 0; i < lives; i++) {
+            oam_spr(2 + (i * 9), 18, 141, 0);
         }
     }
 }
