@@ -26,18 +26,20 @@ unsigned int scroll_x;
 unsigned char pad1;
 int title_animation_index = 0;
 int chicken_animation_index = 0;
-struct GameSprite chickenSprite = {10, 151, 7, 7};
+struct GameSprite chickenSprite = {10, 151, 15, 15};
+struct GameSprite obstacle1 = {254, 159, 7, 7}; //254 max
 int is_jumping = 0;
 int jump_tracker = 0;
 int is_reverse = 0;
 int score = 0;
 int threshold_score = 0;
+int threshold_collide = 0;
 int lives = 3;
 
 void scroll_bg() {
     if (game_state == 0) {
         scroll_x = default_scroll;
-    } else {
+    } else if(game_state == 1) {
         scroll_x += 1;
     }
 
@@ -104,38 +106,54 @@ void draw_sprites() {
         oam_spr(100 + (8 * 4), 94, 116, 0);
 
     } else {
+        if (game_state == 1) {
+            if (is_jumping) {
 
-        if (is_jumping) {
+                if (is_reverse) {
+                    jump_tracker -= 2;
+                    chickenSprite.y += 2;
+                } else {
+                    jump_tracker += 1;
+                    chickenSprite.y -= 1;
+                }
 
-            if (is_reverse) {
-                jump_tracker -= 2;
-                chickenSprite.y += 2;
+                oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_jump);
+                if (jump_tracker == 30) {
+                    is_reverse = 1;
+                }
+                if (jump_tracker == 0) {
+                    is_reverse = 0;
+                    is_jumping = 0;
+                }
             } else {
-                jump_tracker += 1;
-                chickenSprite.y -= 1;
+                if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
+                    oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_left);
+                } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
+                    oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_right);
+                }
+            }
+            
+            chicken_animation_index += 1;
+            if (chicken_animation_index == 17) {
+                chicken_animation_index = 0;
             }
 
-            oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_jump);
-            if (jump_tracker == 30) {
-                is_reverse = 1;
-            }
-            if (jump_tracker == 0) {
-                is_reverse = 0;
-                is_jumping = 0;
-            }
-        } else {
-            if (chicken_animation_index >= 0 && chicken_animation_index <=8) {
-                oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_left);
-            } else if (chicken_animation_index >= 9 && chicken_animation_index <= 17) {
-                oam_meta_spr(chickenSprite.x, chickenSprite.y, chicken_right);
-            }
-        }
-        
-        chicken_animation_index += 1;
-        if (chicken_animation_index == 17) {
-            chicken_animation_index = 0;
-        }
+            //show obstacles
+            oam_spr(obstacle1.x, obstacle1.y, 192, 0);
+            obstacle1.x -= 1;
 
+            threshold_score += 1;
+
+            if (threshold_score == 15) {
+                score += 1;
+                threshold_score = 0;
+            }
+
+            //show lives
+            for (i = 0; i < lives; i++) {
+                oam_spr(2 + (i * 9), 18, 141, 0);
+            }
+        }
         //show score
         oam_spr(2, 2, 83, 0);
         oam_spr(2 + 8, 2, 99, 0);
@@ -143,13 +161,6 @@ void draw_sprites() {
         oam_spr(2 + (8 * 3), 2, 114, 0);
         oam_spr(2 + (8 * 4), 2, 101, 0);
         oam_spr(2 + (8 * 5), 2, 58, 0);
-
-        threshold_score += 1;
-
-        if (threshold_score == 15) {
-            score += 1;
-            threshold_score = 0;
-        }
 
         itoa(score, buffer, 10);
 
@@ -190,10 +201,6 @@ void draw_sprites() {
             }
         }
 
-        //show lives
-        for (i = 0; i < lives; i++) {
-            oam_spr(2 + (i * 9), 18, 141, 0);
-        }
     }
 }
 
@@ -209,6 +216,34 @@ void check_input() {
                 sfx_play(1, 0);
                 is_jumping = 1;
             }
+        }
+    }
+}
+
+void is_collided()  {
+    if (game_state == 1) {
+
+        if (threshold_collide > 0) {
+            threshold_collide += 1;
+
+            if (threshold_collide == 40) {
+                threshold_collide = 0;
+            }
+        }
+
+        if (check_collision(&chickenSprite, &obstacle1)) {
+            pal_col(0,DK_GR);
+            if(threshold_collide == 0) {
+                sfx_play(2, 0);
+                threshold_collide += 1;
+                lives -= 1;
+
+                if (lives == 0) {
+                    game_state = 2;
+                }
+            }
+        } else {
+            pal_col(0,DK_BL);
         }
     }
 }
@@ -234,7 +269,6 @@ void main (void) {
         scroll_bg();
         draw_sprites();
         check_input();
+        is_collided();
     }
 }
-    
-    
